@@ -1,6 +1,19 @@
 class Admin::JobsController < ApplicationController
-  before_filter :authenticate_user!, only: [:new, :create, :update, :destroy, :edit, ]
-  before_filter :require_is_admin
+  before_action :authenticate_user!, only: [:new, :create, :update, :destroy, :edit, ]
+  before_action :require_is_admin
+  layout "admin"
+
+  def publish
+    @job = Job.find(params[:id])
+    @job.publish!
+    redirect_to :back
+  end
+
+  def hide
+    @job = Job.find(params[:id])
+    @job.hide!
+    redirect_to :back
+  end
 
   def index
     @jobs = Job.all
